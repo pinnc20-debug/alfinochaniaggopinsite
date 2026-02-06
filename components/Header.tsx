@@ -111,10 +111,13 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
                    <div className="flex items-center space-x-0 md:space-x-0 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
                        <button 
                          onClick={() => setShowMainMenu(true)}
-                         className="mr-1 p-2 rounded-full text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-sm transition-all duration-300"
+                         className="group mr-1 p-2 flex items-center rounded-full text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-sm transition-all duration-300"
                          aria-label="Menu Utama"
                        >
                          <Info size={16} strokeWidth={2.5} />
+                         <span className="overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out text-xs font-bold max-w-[40px] ml-1 opacity-100 lg:max-w-0 lg:ml-0 lg:opacity-0 lg:group-hover:max-w-[40px] lg:group-hover:ml-1 lg:group-hover:opacity-100">
+                           Info
+                         </span>
                        </button>
                        <a 
                          href="#snapdragon" 
