@@ -1,5 +1,5 @@
 import { useState, useEffect, MouseEvent } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 interface HeaderProps {
   currentView: string;
@@ -107,14 +107,14 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
                        </button>
                    </div>
                ) : (
-                   // NAVIGASI HOME (Default: Arrow + Anchor Links)
+                   // NAVIGASI HOME (Default: Info Icon + Anchor Links)
                    <div className="flex items-center space-x-0 md:space-x-0 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
                        <button 
                          onClick={() => setShowMainMenu(true)}
                          className="mr-1 p-2 rounded-full text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-sm transition-all duration-300"
                          aria-label="Menu Utama"
                        >
-                         <ArrowLeft size={16} strokeWidth={2.5} />
+                         <Info size={16} strokeWidth={2.5} />
                        </button>
                        <a 
                          href="#snapdragon" 
