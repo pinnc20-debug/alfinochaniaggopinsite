@@ -19,8 +19,8 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
   ];
 
   useEffect(() => {
-    const totalDuration = 10000; // 10 detik total loading
-    const textIntervalTime = 2000; // Ganti teks setiap 2 detik (5 teks x 2s = 10s)
+    const totalDuration = 8000; // 8 detik total loading
+    const textIntervalTime = 1600; // 8000ms / 5 texts = 1600ms per teks
     const progressIntervalTime = 50; // Update bar setiap 50ms
     
     // Timer untuk mengganti teks
@@ -43,20 +43,20 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
     }, progressIntervalTime);
 
     // Timeline animasi
-    // 9.5 detik: Mulai sembunyikan konten (logo, bar, teks)
+    // 7.5 detik: Mulai sembunyikan konten (logo, bar, teks)
     const contentFadeTimer = setTimeout(() => {
       setHideContent(true);
-    }, 9500);
+    }, 7500);
 
-    // 10 detik: Mulai animasi tirai terbuka
+    // 8 detik: Mulai animasi tirai terbuka
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
-    }, 10000);
+    }, 8000);
 
-    // 11 detik: Selesai total (hapus komponen dari DOM)
+    // 9 detik: Selesai total (hapus komponen dari DOM)
     const completeTimer = setTimeout(() => {
       onComplete();
-    }, 11000);
+    }, 9000);
 
     return () => {
       clearInterval(textTimer);
