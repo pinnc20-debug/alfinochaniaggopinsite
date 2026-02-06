@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, MouseEvent } from 'react';
 import { ArrowLeft } from 'lucide-react';
 
 interface HeaderProps {
@@ -25,12 +25,11 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
           setShowMainMenu(true);
       } else {
           // Jika kembali ke home, defaultnya tutup menu utama kecuali user membukanya manual
-          // Namun logika 'Beranda' click akan men-set false, jadi ini aman
       }
   }, [currentView]);
 
   // Fungsi khusus untuk scroll manual tanpa mengubah URL secara paksa
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
     const element = document.getElementById(id);
     if (element) {

@@ -1,7 +1,8 @@
 import { ChevronDown } from 'lucide-react';
+import { MouseEvent } from 'react';
 
 export const Hero = () => {
-  const handleScrollDown = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleScrollDown = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     const element = document.getElementById('snapdragon');
     if (element) {
