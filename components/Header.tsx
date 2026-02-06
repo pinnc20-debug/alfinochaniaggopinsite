@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Cpu, Zap } from 'lucide-react';
 
 export const Header: React.FC = () => {
   return (
