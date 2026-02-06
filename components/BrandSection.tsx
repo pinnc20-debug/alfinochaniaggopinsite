@@ -9,6 +9,12 @@ interface BrandSectionProps {
 export const BrandSection = ({ data, align }: BrandSectionProps) => {
   const isLeft = align === 'left';
   
+  // URL Gambar sesuai permintaan user
+  // Snapdragon (align left) dan MediaTek (align right)
+  const imageUrl = isLeft 
+    ? "https://www.planetgadget.store/media/wysiwyg/blog/post/s/n/snapdragon_elite_8_hp_apa_saja.jpg" 
+    : "https://statik.tempo.co/data/2023/11/07/id_1252310/1252310_720.jpg";
+  
   return (
     <section id={data.id} className="py-10 md:py-24 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -18,11 +24,11 @@ export const BrandSection = ({ data, align }: BrandSectionProps) => {
           <div className="w-full md:w-1/2">
             <div className={`relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl group border-4 ${isLeft ? 'border-red-50' : 'border-amber-50'}`}>
               <div className={`absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity ${data.color}`}></div>
-              {/* Aspect Ratio diubah ke video (16:9) pada mobile agar tidak terlalu tinggi */}
+              {/* Aspect Ratio diubah ke aspect-square (persegi) agar pas di gambar chipset */}
               <img 
-                src={isLeft ? "https://picsum.photos/800/800?random=1" : "https://picsum.photos/800/800?random=2"} 
+                src={imageUrl} 
                 alt={`${data.name} Chipset visualization`} 
-                className="w-full aspect-video md:aspect-auto md:h-full object-cover transform group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0"
+                className="w-full aspect-square object-cover transform group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0"
               />
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 bg-gradient-to-t from-black/90 to-transparent text-white">
                 <h3 className="text-xl md:text-3xl font-bold">{data.flagshipChip.name}</h3>

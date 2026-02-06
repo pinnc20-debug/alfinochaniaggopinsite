@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react';
+import { ArrowLeft } from 'lucide-react';
 
-export const Header = () => {
+interface HeaderProps {
+  currentView: string;
+  onNavigate: (view: any) => void;
+}
+
+export const Header = ({ currentView, onNavigate }: HeaderProps) => {
   const [scrolled, setScrolled] = useState(false);
+  const [showMainMenu, setShowMainMenu] = useState(false);
 
   // Handle scroll effect for navbar background
   useEffect(() => {
@@ -11,6 +18,16 @@ export const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Sinkronisasi state menu jika view berubah dari luar (misal reset)
+  useEffect(() => {
+      if (currentView !== 'home') {
+          setShowMainMenu(true);
+      } else {
+          // Jika kembali ke home, defaultnya tutup menu utama kecuali user membukanya manual
+          // Namun logika 'Beranda' click akan men-set false, jadi ini aman
+      }
+  }, [currentView]);
 
   // Fungsi khusus untuk scroll manual tanpa mengubah URL secara paksa
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -31,6 +48,14 @@ export const Header = () => {
     }
   };
 
+  const handleHomeClick = () => {
+      onNavigate('home');
+      setShowMainMenu(false);
+      if (currentView === 'home') {
+         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+  };
+
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 shadow-sm backdrop-blur-md' : 'bg-white/90 backdrop-blur-sm border-b border-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,7 +63,7 @@ export const Header = () => {
           
           {/* Top Row on Mobile: Logo */}
           <div className="w-full md:w-auto flex justify-center md:justify-start items-center mb-2 md:mb-0">
-             <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="flex items-center space-x-2 z-50 hover:opacity-90 transition-opacity py-1">
+             <a href="#" onClick={(e) => { e.preventDefault(); handleHomeClick(); }} className="flex items-center space-x-2 z-50 hover:opacity-90 transition-opacity py-1">
                 <img 
                   src="https://png.pngtree.com/png-clipart/20191122/original/pngtree-vector-star-icon-png-image_5169247.jpg" 
                   alt="Pinsite Logo" 
@@ -50,36 +75,71 @@ export const Header = () => {
              </a>
           </div>
           
-          {/* Centered Capsule Navigation - True Capsule Look on Mobile */}
+          {/* Centered Capsule Navigation */}
           <div className="w-full md:w-auto md:absolute md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 pb-1 md:pb-0">
-            {/* 
-                Perubahan disini: 
-                - mx-auto: tengah
-                - w-fit: lebar sesuai konten (kapsul), bukan full width
-                - max-w-[95%]: safety margin di layar sangat kecil
-            */}
-            <div className="mx-auto w-fit max-w-[98%] flex items-center justify-center p-1.5 bg-gray-100 rounded-full border border-gray-200 shadow-md md:shadow-sm">
-               <a 
-                 href="#snapdragon" 
-                 onClick={(e) => handleNavClick(e, 'snapdragon')}
-                 className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-snapdragon hover:shadow-sm transition-all duration-300 active:scale-95 whitespace-nowrap"
-               >
-                 Snapdragon
-               </a>
-               <a 
-                 href="#mediatek" 
-                 onClick={(e) => handleNavClick(e, 'mediatek')}
-                 className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-mediatek hover:shadow-sm transition-all duration-300 active:scale-95 whitespace-nowrap"
-               >
-                 MediaTek
-               </a>
-               <a 
-                 href="#comparison" 
-                 onClick={(e) => handleNavClick(e, 'comparison')}
-                 className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm transition-all duration-300 active:scale-95 whitespace-nowrap"
-               >
-                 VS
-               </a>
+            <div className="mx-auto w-fit max-w-[98%] flex items-center justify-center p-1.5 bg-gray-100 rounded-full border border-gray-200 shadow-md md:shadow-sm transition-all duration-300">
+               
+               {showMainMenu ? (
+                   // MENU UTAMA (Tampil saat panah ditekan atau di halaman selain home)
+                   <div className="flex items-center space-x-1 md:space-x-2 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
+                       <button 
+                         onClick={handleHomeClick}
+                         className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm transition-all duration-300 whitespace-nowrap"
+                       >
+                         Beranda
+                       </button>
+                       <button 
+                         onClick={() => onNavigate('gallery')}
+                         className={`px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap ${currentView === 'gallery' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm'}`}
+                       >
+                         Galeri
+                       </button>
+                       <button 
+                         onClick={() => onNavigate('testimonials')}
+                         className={`px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap ${currentView === 'testimonials' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm'}`}
+                       >
+                         Testimoni
+                       </button>
+                       <button 
+                         onClick={() => onNavigate('about')}
+                         className={`px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap ${currentView === 'about' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm'}`}
+                       >
+                         Tentang Saya
+                       </button>
+                   </div>
+               ) : (
+                   // NAVIGASI HOME (Default: Arrow + Anchor Links)
+                   <div className="flex items-center space-x-0 md:space-x-0 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
+                       <button 
+                         onClick={() => setShowMainMenu(true)}
+                         className="mr-1 p-2 rounded-full text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-sm transition-all duration-300"
+                         aria-label="Menu Utama"
+                       >
+                         <ArrowLeft size={16} strokeWidth={2.5} />
+                       </button>
+                       <a 
+                         href="#snapdragon" 
+                         onClick={(e) => handleNavClick(e, 'snapdragon')}
+                         className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-snapdragon hover:shadow-sm transition-all duration-300 active:scale-95 whitespace-nowrap"
+                       >
+                         Snapdragon
+                       </a>
+                       <a 
+                         href="#mediatek" 
+                         onClick={(e) => handleNavClick(e, 'mediatek')}
+                         className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-mediatek hover:shadow-sm transition-all duration-300 active:scale-95 whitespace-nowrap"
+                       >
+                         MediaTek
+                       </a>
+                       <a 
+                         href="#comparison" 
+                         onClick={(e) => handleNavClick(e, 'comparison')}
+                         className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-sm transition-all duration-300 active:scale-95 whitespace-nowrap"
+                       >
+                         VS
+                       </a>
+                   </div>
+               )}
             </div>
           </div>
 

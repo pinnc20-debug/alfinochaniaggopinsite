@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { BrandSection } from './components/BrandSection';
@@ -6,9 +6,18 @@ import { ComparisonTable } from './components/ComparisonTable';
 import { Footer } from './components/Footer';
 import { SNAPDRAGON_DATA, MEDIATEK_DATA } from './constants';
 
+export type ViewState = 'home' | 'gallery' | 'testimonials' | 'about';
+
 const App = () => {
+  const [currentView, setCurrentView] = useState<ViewState>('home');
+
   useEffect(() => {
-    // Logika scroll menggunakan native hash change event
+    // Logika scroll hash hanya aktif di home
+    if (currentView !== 'home') {
+       window.scrollTo(0, 0);
+       return;
+    }
+
     const handleHashChange = () => {
       const hash = window.location.hash;
       
@@ -33,26 +42,34 @@ const App = () => {
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
     };
-  }, []);
+  }, [currentView]);
 
   return (
     <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-gray-200">
-      <Header />
+      <Header currentView={currentView} onNavigate={setCurrentView} />
       
       <main>
-        <Hero />
-        
-        {/* Snapdragon Section */}
-        <BrandSection data={SNAPDRAGON_DATA} align="left" />
-        
-        {/* MediaTek Section */}
-        <BrandSection data={MEDIATEK_DATA} align="right" />
-        
-        {/* Comparison Table */}
-        <ComparisonTable />
+        {currentView === 'home' ? (
+          <>
+            <Hero />
+            
+            {/* Snapdragon Section */}
+            <BrandSection data={SNAPDRAGON_DATA} align="left" />
+            
+            {/* MediaTek Section */}
+            <BrandSection data={MEDIATEK_DATA} align="right" />
+            
+            {/* Comparison Table */}
+            <ComparisonTable />
+          </>
+        ) : (
+          /* Halaman kosong sesuai permintaan user */
+          <div className="min-h-screen bg-white w-full"></div>
+        )}
       </main>
 
-      <Footer />
+      {/* Footer hanya tampil di home */}
+      {currentView === 'home' && <Footer />}
     </div>
   );
 };
