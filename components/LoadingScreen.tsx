@@ -5,62 +5,29 @@ interface LoadingScreenProps {
 }
 
 export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
-  const [textIndex, setTextIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
   const [hideContent, setHideContent] = useState(false);
 
-  const loadingTexts = [
-    "mengautentifikasi...",
-    "memuat elemen...",
-    "mengoptimalkan web...",
-    "bot verification...",
-    "allowed"
-  ];
-
   useEffect(() => {
-    const totalDuration = 8000; // 8 detik total loading
-    const textIntervalTime = 1600; // 8000ms / 5 texts = 1600ms per teks
-    const progressIntervalTime = 50; // Update bar setiap 50ms
-    
-    // Timer untuk mengganti teks
-    const textTimer = setInterval(() => {
-      setTextIndex((prev) => {
-        if (prev < loadingTexts.length - 1) {
-          return prev + 1;
-        }
-        return prev;
-      });
-    }, textIntervalTime);
-
-    // Timer untuk progress bar
-    const progressTimer = setInterval(() => {
-      setProgress((prev) => {
-        const increment = 100 / (totalDuration / progressIntervalTime);
-        const next = prev + increment;
-        return next > 100 ? 100 : next;
-      });
-    }, progressIntervalTime);
+    const totalDuration = 4000; // 4 detik total loading
 
     // Timeline animasi
-    // 7.5 detik: Mulai sembunyikan konten (logo, bar, teks)
+    // 3.5 detik: Mulai sembunyikan konten (logo)
     const contentFadeTimer = setTimeout(() => {
       setHideContent(true);
-    }, 7500);
+    }, 3500);
 
-    // 8 detik: Mulai animasi tirai terbuka
+    // 4 detik: Mulai animasi tirai terbuka
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
-    }, 8000);
+    }, 4000);
 
-    // 9 detik: Selesai total (hapus komponen dari DOM)
+    // 5 detik: Selesai total (hapus komponen dari DOM)
     const completeTimer = setTimeout(() => {
       onComplete();
-    }, 9000);
+    }, 5000);
 
     return () => {
-      clearInterval(textTimer);
-      clearInterval(progressTimer);
       clearTimeout(contentFadeTimer);
       clearTimeout(exitTimer);
       clearTimeout(completeTimer);
@@ -84,11 +51,11 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
         }`}
       ></div>
 
-      {/* Konten Loading (Logo, Bar, Teks) */}
+      {/* Konten Loading (Hanya Logo) */}
       <div className={`relative z-10 flex flex-col items-center justify-center w-full max-w-xs transition-opacity duration-500 ${hideContent ? 'opacity-0' : 'opacity-100'}`}>
         
         {/* Logo & Brand Name */}
-        <div className="mb-8 flex items-center gap-4 animate-pulse">
+        <div className="flex items-center gap-4 animate-pulse">
             <div className="p-1 bg-white/10 rounded-full">
                 <img 
                   src="https://png.pngtree.com/png-clipart/20191122/original/pngtree-vector-star-icon-png-image_5169247.jpg" 
@@ -100,22 +67,8 @@ export const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
               Pin<span className="text-gray-400 font-light">site</span>
             </span>
         </div>
-
-        {/* Loading Bar Container */}
-        <div className="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden mb-4">
-          {/* Loading Bar Fill */}
-          <div 
-            className="h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.7)] transition-all duration-75 ease-linear"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-
-        {/* Dynamic Text */}
-        <div className="h-6 overflow-hidden">
-             <p className="text-gray-400 text-xs font-mono tracking-widest uppercase text-center animate-fade-in-up key={textIndex}">
-               {loadingTexts[textIndex]}
-             </p>
-        </div>
+        
+        {/* Progress Bar dan Teks telah dihapus sesuai permintaan */}
       </div>
     </div>
   );
