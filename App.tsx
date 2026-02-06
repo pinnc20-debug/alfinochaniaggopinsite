@@ -4,17 +4,19 @@ import { Hero } from './components/Hero';
 import { BrandSection } from './components/BrandSection';
 import { ComparisonTable } from './components/ComparisonTable';
 import { Footer } from './components/Footer';
+import { LoadingScreen } from './components/LoadingScreen';
 import { SNAPDRAGON_DATA, MEDIATEK_DATA } from './constants';
 
 export type ViewState = 'home' | 'gallery' | 'testimonials' | 'about';
 
 const App = () => {
   const [currentView, setCurrentView] = useState<ViewState>('home');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Logika scroll hash hanya aktif di home
-    if (currentView !== 'home') {
-       window.scrollTo(0, 0);
+    if (currentView !== 'home' || isLoading) {
+       if (currentView !== 'home') window.scrollTo(0, 0);
        return;
     }
 
@@ -33,8 +35,8 @@ const App = () => {
       }
     };
 
-    // Jalankan saat mount untuk menangani initial hash
-    handleHashChange();
+    // Jalankan saat mount untuk menangani initial hash (setelah loading selesai)
+    setTimeout(handleHashChange, 100);
 
     // Listen untuk perubahan hash
     window.addEventListener('hashchange', handleHashChange);
@@ -42,10 +44,14 @@ const App = () => {
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
     };
-  }, [currentView]);
+  }, [currentView, isLoading]);
 
   return (
     <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-gray-200">
+      
+      {/* Tampilkan Loading Screen jika status loading masih true */}
+      {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+
       <Header currentView={currentView} onNavigate={setCurrentView} />
       
       <main>
