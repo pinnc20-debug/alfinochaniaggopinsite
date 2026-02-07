@@ -44,7 +44,7 @@ export const BrandSection = ({ data, align }: BrandSectionProps) => {
                 {data.philosophy}
               </div>
               <h2 className={`text-3xl md:text-5xl font-bold mb-3 md:mb-6 ${data.accentColor}`}>{data.name}</h2>
-              <p className="text-base md:text-xl text-gray-600 leading-relaxed text-justify md:text-left">
+              <p className="text-base md:text-xl text-gray-600 leading-relaxed text-left">
                 {data.description}
               </p>
             </div>

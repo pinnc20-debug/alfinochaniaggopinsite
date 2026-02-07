@@ -91,7 +91,7 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
           
           {/* Centered Capsule Navigation */}
           <div className="w-full md:w-auto md:absolute md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 pb-1 md:pb-0">
-            <div className="mx-auto w-fit max-w-[98%] flex items-center justify-center p-1.5 bg-gray-100 rounded-full border border-gray-200 shadow-md md:shadow-sm transition-all duration-300 hover:shadow-md">
+            <div className="mx-auto w-fit max-w-full flex items-center justify-center p-1 md:p-1.5 bg-gray-100 rounded-full border border-gray-200 shadow-md md:shadow-sm transition-all duration-300 hover:shadow-md">
                
                {/* Persistent Info Toggle Button with Enhanced Animation */}
                <button 
@@ -117,30 +117,30 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
                <div className="flex items-center">
                    {showMainMenu ? (
                        // MENU UTAMA (Expanded)
-                       <div className="flex items-center space-x-1 md:space-x-2 animate-fade-in-up pl-1" style={{ animationDuration: '0.4s' }}>
+                       <div className="flex items-center space-x-0 md:space-x-2 animate-fade-in-up pl-1" style={{ animationDuration: '0.4s' }}>
                            <button 
                              onClick={handleHomeClick}
-                             className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
+                             className="px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
                            >
                              Beranda
                            </button>
                            <button 
                              onClick={() => onNavigate('gallery')}
-                             className={`px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === 'gallery' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900'}`}
+                             className={`px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === 'gallery' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900'}`}
                            >
                              Galeri
                            </button>
                            <button 
                              onClick={() => onNavigate('testimonials')}
-                             className={`px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === 'testimonials' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900'}`}
+                             className={`px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === 'testimonials' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900'}`}
                            >
                              Testimoni
                            </button>
                            <button 
                              onClick={() => onNavigate('about')}
-                             className={`px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === 'about' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900'}`}
+                             className={`px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === 'about' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900'}`}
                            >
-                             Tentang Saya
+                             Tentang
                            </button>
                        </div>
                    ) : (
@@ -149,21 +149,21 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
                            <a 
                              href="#snapdragon" 
                              onClick={(e) => handleNavClick(e, 'snapdragon')}
-                             className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-snapdragon hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95 whitespace-nowrap"
+                             className="px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-snapdragon hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95 whitespace-nowrap"
                            >
                              Snapdragon
                            </a>
                            <a 
                              href="#mediatek" 
                              onClick={(e) => handleNavClick(e, 'mediatek')}
-                             className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-mediatek hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95 whitespace-nowrap"
+                             className="px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-mediatek hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95 whitespace-nowrap"
                            >
                              MediaTek
                            </a>
                            <a 
                              href="#comparison" 
                              onClick={(e) => handleNavClick(e, 'comparison')}
-                             className="px-4 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95 whitespace-nowrap"
+                             className="px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95 whitespace-nowrap"
                            >
                              VS
                            </a>
