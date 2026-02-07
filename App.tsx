@@ -14,9 +14,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Logika scroll hash hanya aktif di home
+    // Logika scroll hash hanya aktif di home dan setelah loading selesai
     if (currentView !== 'home' || isLoading) {
-       if (currentView !== 'home') window.scrollTo(0, 0);
        return;
     }
 
@@ -26,7 +25,7 @@ const App = () => {
       if (!hash || hash === '#') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
-        // Hapus tanda # di depan untuk mendapatkan id (contoh: "#snapdragon" -> "snapdragon")
+        // Hapus tanda # di depan untuk mendapatkan id
         const id = hash.substring(1);
         const element = document.getElementById(id);
         if (element) {
@@ -35,12 +34,10 @@ const App = () => {
       }
     };
 
-    // Jalankan saat mount untuk menangani initial hash (setelah loading selesai)
+    // Jalankan saat mount/view change (tunggu render selesai)
     setTimeout(handleHashChange, 100);
 
-    // Listen untuk perubahan hash
     window.addEventListener('hashchange', handleHashChange);
-    
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
     };
@@ -69,8 +66,13 @@ const App = () => {
             <ComparisonTable />
           </>
         ) : (
-          /* Halaman kosong sesuai permintaan user */
-          <div className="min-h-screen bg-white w-full"></div>
+          /* Halaman kosong placeholder dengan animasi sederhana */
+          <div className="min-h-screen bg-white w-full flex items-center justify-center animate-fade-in-up">
+              <div className="text-center">
+                  <h2 className="text-2xl font-bold text-gray-300 mb-2">Halaman {currentView}</h2>
+                  <p className="text-gray-400">Sedang dalam pengembangan</p>
+              </div>
+          </div>
         )}
       </main>
 

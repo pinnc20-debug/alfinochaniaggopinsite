@@ -12,10 +12,10 @@ export const ComparisonTable = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl md:rounded-3xl shadow-lg overflow-hidden border border-gray-100">
+        <div className="bg-white rounded-2xl md:rounded-3xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-500">
           
           {/* Mobile Scroll Hint */}
-          <div className="md:hidden flex items-center justify-center gap-2 p-2 bg-yellow-50 text-xs text-yellow-700 border-b border-yellow-100">
+          <div className="md:hidden flex items-center justify-center gap-2 p-2 bg-yellow-50 text-xs text-yellow-700 border-b border-yellow-100 animate-pulse">
              <ArrowRightLeft size={14} />
              <span>Geser tabel ke samping untuk melihat detail</span>
           </div>
@@ -23,7 +23,7 @@ export const ComparisonTable = () => {
           {/* Table Container - Scrollable on Mobile */}
           <div className="overflow-x-auto">
             <div className="min-w-[600px] md:min-w-full">
-              <div className="grid grid-cols-3 bg-gray-900 text-white text-xs md:text-sm font-semibold uppercase tracking-wider text-center sticky top-0">
+              <div className="grid grid-cols-3 bg-gray-900 text-white text-xs md:text-sm font-semibold uppercase tracking-wider text-center sticky top-0 z-10">
                 <div className="py-3 md:py-6 flex flex-col items-center justify-center border-r border-gray-800">
                   <span className="text-gray-400 text-[10px] md:text-xs mb-1">Fitur</span>
                 </div>
@@ -46,8 +46,8 @@ export const ComparisonTable = () => {
                   { label: 'Ray Tracing', snap: 'HW Acceleration', med: 'HW Acceleration' },
                   { label: 'Prosesor AI', snap: 'Hexagon NPU', med: 'APU 790' },
                 ].map((row, idx) => (
-                  <div key={idx} className="grid grid-cols-3 hover:bg-gray-50 transition-colors">
-                    <div className="p-3 md:p-6 text-gray-500 font-medium text-xs md:text-sm flex items-center justify-center text-center bg-gray-50/50">
+                  <div key={idx} className="grid grid-cols-3 hover:bg-gray-50 transition-colors duration-200 group">
+                    <div className="p-3 md:p-6 text-gray-500 font-medium text-xs md:text-sm flex items-center justify-center text-center bg-gray-50/50 group-hover:bg-gray-100 transition-colors">
                       {row.label}
                     </div>
                     <div className="p-3 md:p-6 text-gray-900 font-semibold text-xs md:text-sm flex items-center justify-center text-center border-x border-gray-100">
