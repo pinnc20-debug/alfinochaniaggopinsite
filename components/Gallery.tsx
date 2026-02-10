@@ -1,12 +1,12 @@
-import { useRef, useState, memo, useEffect } from 'react';
+import { useRef, useState, memo, useEffect, useCallback } from 'react';
 import { ScrollReveal } from './ScrollReveal';
-import { Image as ImageIcon, Play, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Play, ArrowRight, ArrowLeft } from 'lucide-react';
 
 interface GalleryItem {
   id: number;
   type: 'image' | 'video';
   src: string;
-  thumbnail?: string; // Tambahan properti thumbnail
+  thumbnail?: string;
   caption: string;
 }
 
@@ -99,10 +99,6 @@ const VideoPlayer = memo(({ src, thumbnail }: { src: string, thumbnail?: string 
         <div className="z-10 w-16 h-16 rounded-full bg-white/30 backdrop-blur-md border border-white/40 shadow-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 group-hover:bg-white/40">
            <Play size={32} className="text-white ml-1 drop-shadow-md" fill="currentColor" />
         </div>
-        
-        <div className="absolute bottom-6 px-3 py-1 rounded-full bg-black/30 backdrop-blur-sm text-[10px] font-bold text-white uppercase tracking-widest border border-white/20">
-           Klik untuk memutar
-        </div>
       </button>
     );
   }
@@ -134,7 +130,7 @@ export const Gallery = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
 
-  // Efek Auto Scroll
+  // Efek Auto Scroll (Dikembalikan)
   useEffect(() => {
     // Jangan scroll jika sedang dipause (user interaksi)
     if (isPaused) return;
@@ -158,7 +154,8 @@ export const Gallery = () => {
     return () => clearInterval(autoScrollInterval);
   }, [isPaused]);
 
-  const scroll = (direction: 'left' | 'right') => {
+  // Fungsi Scroll Manual
+  const scroll = useCallback((direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const { current } = scrollRef;
       const scrollAmount = 524;
@@ -169,7 +166,7 @@ export const Gallery = () => {
         current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
       }
     }
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-white pt-28 pb-20 overflow-hidden">
@@ -230,27 +227,17 @@ export const Gallery = () => {
                 >
                   <div className="group/item relative aspect-[4/3] rounded-3xl overflow-hidden bg-gray-50 shadow-sm transition-all duration-300 border border-gray-200 flex items-center justify-center">
                     
-                    {/* Media Content Optimasi */}
+                    {/* Media Content - Tanpa Teks Overlay */}
                     {item.type === 'video' ? (
                        <VideoPlayer src={item.src} thumbnail={item.thumbnail} />
                     ) : (
                        <ImageItem src={item.src} caption={item.caption} />
                     )}
 
-                    {/* Overlay Gradient untuk Image */}
+                    {/* Gradient Halus Saja (Tanpa Teks) */}
                     {item.type === 'image' && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-100 pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-100 pointer-events-none" />
                     )}
-
-                    {/* Badge Foto/Video */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 z-10 pointer-events-none">
-                      <div className="flex items-center gap-2 text-white/90 text-sm font-medium drop-shadow-md">
-                        {item.type === 'image' ? <ImageIcon size={16} /> : <Play size={16} />}
-                        <span className="uppercase tracking-wider text-[10px] font-bold bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/10">
-                            {item.type === 'image' ? 'Foto' : 'Video'}
-                        </span>
-                      </div>
-                    </div>
                   </div>
                 </div>
               ))}

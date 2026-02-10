@@ -28,6 +28,8 @@ export const BrandSection = ({ data, align }: BrandSectionProps) => {
               <img 
                 src={imageUrl} 
                 alt={`${data.name} Chipset visualization`} 
+                loading="lazy"
+                decoding="async"
                 className="w-full aspect-square object-cover transform group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0"
               />
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 bg-gradient-to-t from-black/90 to-transparent text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">

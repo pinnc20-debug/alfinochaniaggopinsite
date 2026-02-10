@@ -6,6 +6,7 @@ import { ComparisonTable } from './components/ComparisonTable';
 import { Footer } from './components/Footer';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Gallery } from './components/Gallery';
+import { Testimonials } from './components/Testimonials';
 import { SNAPDRAGON_DATA, MEDIATEK_DATA } from './constants';
 
 export type ViewState = 'home' | 'gallery' | 'testimonials' | 'about';
@@ -70,7 +71,9 @@ const App = () => {
 
         {currentView === 'gallery' && <Gallery />}
 
-        {(currentView === 'testimonials' || currentView === 'about') && (
+        {currentView === 'testimonials' && <Testimonials />}
+
+        {currentView === 'about' && (
           /* Halaman kosong placeholder dengan animasi sederhana */
           <div className="min-h-screen bg-white w-full flex items-center justify-center animate-fade-in-up">
               <div className="text-center">
@@ -81,8 +84,8 @@ const App = () => {
         )}
       </main>
 
-      {/* Footer tampil di home dan gallery */}
-      {(currentView === 'home' || currentView === 'gallery') && <Footer />}
+      {/* Footer tampil di semua halaman */}
+      <Footer />
     </div>
   );
 };
