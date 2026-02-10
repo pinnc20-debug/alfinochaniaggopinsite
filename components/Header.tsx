@@ -1,5 +1,5 @@
 import { useState, useEffect, MouseEvent } from 'react';
-import { Info } from 'lucide-react';
+import { Info, X } from 'lucide-react';
 
 interface HeaderProps {
   currentView: string;
@@ -100,62 +100,63 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
           
           {/* Centered Capsule Navigation */}
           <div className="w-full md:w-auto md:absolute md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 pb-0.5 md:pb-0">
-            <div className="mx-auto w-fit max-w-full flex items-center justify-center p-1 md:p-1.5 bg-gray-100 rounded-full border border-gray-200 shadow-md md:shadow-sm transition-all duration-300 hover:shadow-md">
+            <div className={`mx-auto w-fit max-w-full flex items-center justify-center p-1 md:p-1.5 rounded-full border border-gray-200 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${showMainMenu ? 'bg-white shadow-lg scale-[1.02]' : 'bg-gray-100 shadow-md md:shadow-sm hover:shadow-md'}`}>
                
-               {/* Persistent Info Toggle Button with simplified state */}
+               {/* Persistent Info Toggle Button with Animated Icon & Text */}
                <button 
                  onClick={handleInfoToggle}
-                 className={`group relative p-2 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out z-10 ${showMainMenu ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-sm'}`}
+                 className={`group relative p-2 flex items-center justify-center rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-10 ${showMainMenu ? 'bg-gray-100 text-gray-900 rotate-0' : 'text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-sm'}`}
                  aria-label={showMainMenu ? "Tutup Menu" : "Buka Menu"}
                >
-                 <Info 
-                    size={16} 
-                    strokeWidth={2.5} 
-                    className={`transition-transform duration-300 ${showMainMenu ? 'rotate-180 scale-110' : 'group-hover:rotate-12'}`} 
-                 />
-                 {/* Text is only shown when active or desktop, no hover expansion animation */}
-                 <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 text-xs font-bold ${
+                 <div className="relative flex items-center justify-center w-4 h-4">
+                     {/* Info Icon */}
+                     <Info 
+                        size={16} 
+                        strokeWidth={2.5} 
+                        className={`absolute inset-0 transition-all duration-500 ease-out transform ${showMainMenu ? 'rotate-180 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100 group-hover:rotate-12'}`} 
+                     />
+                     {/* Close (X) Icon */}
+                     <X 
+                        size={16} 
+                        strokeWidth={2.5} 
+                        className={`absolute inset-0 transition-all duration-500 ease-out transform ${showMainMenu ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'}`} 
+                     />
+                 </div>
+
+                 {/* Animated Text "Lainnya" */}
+                 <span className={`overflow-hidden whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] text-xs font-bold ${
                     showMainMenu 
-                      ? 'max-w-0 opacity-0 ml-0' // Hide when menu is open
-                      : 'max-w-0 ml-0 opacity-0 lg:max-w-[60px] lg:ml-1 lg:opacity-100' // Show only on desktop default
+                      ? 'max-w-0 opacity-0 -translate-x-2' // Slide out left when menu opens
+                      : 'max-w-0 ml-0 opacity-0 lg:max-w-[60px] lg:ml-1 lg:opacity-100 translate-x-0' // Slide in when menu closes (desktop)
                  }`}>
                    Lainnya
                  </span>
                </button>
 
-               {/* Navigation Links Area - Animations Removed */}
-               <div className="flex items-center">
+               {/* Navigation Links Area */}
+               <div className="flex items-center overflow-hidden">
                    {showMainMenu ? (
-                       // MENU UTAMA (Expanded)
-                       <div className="flex items-center space-x-0 md:space-x-2 pl-1">
-                           <button 
-                             onClick={handleHomeClick}
-                             className="px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
-                           >
-                             Beranda
-                           </button>
-                           <button 
-                             onClick={() => onNavigate('gallery')}
-                             className={`px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === 'gallery' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900'}`}
-                           >
-                             Galeri
-                           </button>
-                           <button 
-                             onClick={() => onNavigate('testimonials')}
-                             className={`px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === 'testimonials' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900'}`}
-                           >
-                             Testimoni
-                           </button>
-                           <button 
-                             onClick={() => onNavigate('about')}
-                             className={`px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === 'about' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600 hover:bg-white hover:text-gray-900'}`}
-                           >
-                             Tentang
-                           </button>
+                       // MENU UTAMA (Expanded) - Animated Entrance
+                       <div className="flex items-center space-x-0 md:space-x-1 pl-1 animate-fade-in-right">
+                           {[
+                              { id: 'home', label: 'Beranda' },
+                              { id: 'gallery', label: 'Galeri' },
+                              { id: 'testimonials', label: 'Testimoni' },
+                              { id: 'about', label: 'Tentang' }
+                           ].map((item, idx) => (
+                             <button 
+                               key={item.id}
+                               onClick={() => item.id === 'home' ? handleHomeClick() : onNavigate(item.id)}
+                               className={`px-3 py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === item.id ? 'bg-gray-100 text-gray-900 shadow-inner' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
+                               style={{ animationDelay: `${idx * 50}ms` }}
+                             >
+                               {item.label}
+                             </button>
+                           ))}
                        </div>
                    ) : (
-                       // NAVIGASI ANCHOR (Default) - Animations Removed
-                       <div className="flex items-center space-x-0 pl-1">
+                       // NAVIGASI ANCHOR (Default) - Animated Entrance
+                       <div className="flex items-center space-x-0 pl-1 animate-fade-in-left">
                            <a 
                              href="#snapdragon" 
                              onClick={(e) => handleNavClick(e, 'snapdragon')}

@@ -72,14 +72,26 @@ const GALLERY_ITEMS: GalleryItem[] = [
   },
 ];
 
-// Sub-komponen VideoPlayer dengan dukungan Thumbnail Image
-const VideoPlayer = memo(({ src, thumbnail }: { src: string, thumbnail?: string }) => {
+// Sub-komponen VideoPlayer dengan dukungan callback state ke parent
+const VideoPlayer = memo(({ src, thumbnail, onPlayStateChange }: { src: string, thumbnail?: string, onPlayStateChange?: (isPlaying: boolean) => void }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const handlePlayClick = () => {
+    setIsPlaying(true);
+    if (onPlayStateChange) onPlayStateChange(true);
+  };
+
+  const handleVideoPauseOrEnd = () => {
+    // Jangan ubah isPlaying ke false agar UI player tetap muncul, 
+    // tapi beritahu parent bahwa playback berhenti agar autoscroll bisa jalan lagi (opsional)
+    // Atau jika ingin strict:
+    if (onPlayStateChange) onPlayStateChange(false);
+  };
 
   if (!isPlaying) {
     return (
       <button 
-        onClick={() => setIsPlaying(true)}
+        onClick={handlePlayClick}
         className="group relative w-full h-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer overflow-hidden"
         aria-label="Putar Video"
       >
@@ -110,6 +122,9 @@ const VideoPlayer = memo(({ src, thumbnail }: { src: string, thumbnail?: string 
       controls
       autoPlay
       playsInline
+      onPause={handleVideoPauseOrEnd}
+      onEnded={handleVideoPauseOrEnd}
+      onPlay={() => onPlayStateChange && onPlayStateChange(true)}
     />
   );
 });
@@ -128,12 +143,13 @@ const ImageItem = memo(({ src, caption }: { src: string, caption: string }) => (
 
 export const Gallery = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState(false); // Pause karena interaksi (hover/touch)
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false); // Pause karena video sedang diputar
 
-  // Efek Auto Scroll (Dikembalikan)
+  // Efek Auto Scroll
   useEffect(() => {
-    // Jangan scroll jika sedang dipause (user interaksi)
-    if (isPaused) return;
+    // Jangan scroll jika sedang dipause (user interaksi) ATAU video sedang diputar
+    if (isPaused || isVideoPlaying) return;
 
     const autoScrollInterval = setInterval(() => {
       if (scrollRef.current) {
@@ -152,7 +168,7 @@ export const Gallery = () => {
     }, 3000); // Scroll setiap 3 detik
 
     return () => clearInterval(autoScrollInterval);
-  }, [isPaused]);
+  }, [isPaused, isVideoPlaying]);
 
   // Fungsi Scroll Manual
   const scroll = useCallback((direction: 'left' | 'right') => {
@@ -229,7 +245,11 @@ export const Gallery = () => {
                     
                     {/* Media Content - Tanpa Teks Overlay */}
                     {item.type === 'video' ? (
-                       <VideoPlayer src={item.src} thumbnail={item.thumbnail} />
+                       <VideoPlayer 
+                          src={item.src} 
+                          thumbnail={item.thumbnail}
+                          onPlayStateChange={setIsVideoPlaying} // Pass handler state
+                       />
                     ) : (
                        <ImageItem src={item.src} caption={item.caption} />
                     )}
