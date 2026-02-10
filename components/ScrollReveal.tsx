@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, ReactNode } from 'react';
+import { useEffect, useRef, useState, ReactNode, FC } from 'react';
 
 interface ScrollRevealProps {
   children?: ReactNode;
@@ -8,13 +8,13 @@ interface ScrollRevealProps {
   threshold?: number; // 0 to 1
 }
 
-export const ScrollReveal = ({ 
+export const ScrollReveal: FC<ScrollRevealProps> = ({ 
   children, 
   animation = 'fade-in-up', 
   delay = '0s', 
   className = '',
   threshold = 0.1 
-}: ScrollRevealProps) => {
+}) => {
   const [isVisible, setIsVisible] = useState(false);
   const domRef = useRef<HTMLDivElement>(null);
 

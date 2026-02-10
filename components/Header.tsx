@@ -93,31 +93,32 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
           <div className="w-full md:w-auto md:absolute md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 pb-1 md:pb-0">
             <div className="mx-auto w-fit max-w-full flex items-center justify-center p-1 md:p-1.5 bg-gray-100 rounded-full border border-gray-200 shadow-md md:shadow-sm transition-all duration-300 hover:shadow-md">
                
-               {/* Persistent Info Toggle Button with Enhanced Animation */}
+               {/* Persistent Info Toggle Button with simplified state */}
                <button 
                  onClick={handleInfoToggle}
-                 className={`group relative p-2 flex items-center justify-center rounded-full transition-all duration-500 ease-in-out z-10 ${showMainMenu ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-sm'}`}
+                 className={`group relative p-2 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out z-10 ${showMainMenu ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-sm'}`}
                  aria-label={showMainMenu ? "Tutup Menu" : "Buka Menu"}
                >
                  <Info 
                     size={16} 
                     strokeWidth={2.5} 
-                    className={`transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${showMainMenu ? 'rotate-180 scale-110' : 'group-hover:rotate-12'}`} 
+                    className={`transition-transform duration-300 ${showMainMenu ? 'rotate-180 scale-110' : 'group-hover:rotate-12'}`} 
                  />
-                 <span className={`overflow-hidden whitespace-nowrap transition-all duration-500 ease-in-out text-xs font-bold ${
+                 {/* Text is only shown when active or desktop, no hover expansion animation */}
+                 <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 text-xs font-bold ${
                     showMainMenu 
-                      ? 'max-w-0 opacity-0 ml-0' 
-                      : 'max-w-[40px] ml-1 opacity-100 lg:max-w-0 lg:ml-0 lg:opacity-0 lg:group-hover:max-w-[40px] lg:group-hover:ml-1 lg:group-hover:opacity-100'
+                      ? 'max-w-0 opacity-0 ml-0' // Hide when menu is open
+                      : 'max-w-0 ml-0 opacity-0 lg:max-w-[60px] lg:ml-1 lg:opacity-100' // Show only on desktop default
                  }`}>
-                   Info
+                   Lainnya
                  </span>
                </button>
 
-               {/* Navigation Links Area */}
+               {/* Navigation Links Area - Animations Removed */}
                <div className="flex items-center">
                    {showMainMenu ? (
                        // MENU UTAMA (Expanded)
-                       <div className="flex items-center space-x-0 md:space-x-2 animate-fade-in-up pl-1" style={{ animationDuration: '0.4s' }}>
+                       <div className="flex items-center space-x-0 md:space-x-2 pl-1">
                            <button 
                              onClick={handleHomeClick}
                              className="px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap"
@@ -144,8 +145,8 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
                            </button>
                        </div>
                    ) : (
-                       // NAVIGASI ANCHOR (Default)
-                       <div className="flex items-center space-x-0 animate-fade-in-up" style={{ animationDuration: '0.4s' }}>
+                       // NAVIGASI ANCHOR (Default) - Animations Removed
+                       <div className="flex items-center space-x-0 pl-1">
                            <a 
                              href="#snapdragon" 
                              onClick={(e) => handleNavClick(e, 'snapdragon')}

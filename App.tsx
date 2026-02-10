@@ -5,6 +5,7 @@ import { BrandSection } from './components/BrandSection';
 import { ComparisonTable } from './components/ComparisonTable';
 import { Footer } from './components/Footer';
 import { LoadingScreen } from './components/LoadingScreen';
+import { Gallery } from './components/Gallery';
 import { SNAPDRAGON_DATA, MEDIATEK_DATA } from './constants';
 
 export type ViewState = 'home' | 'gallery' | 'testimonials' | 'about';
@@ -52,7 +53,7 @@ const App = () => {
       <Header currentView={currentView} onNavigate={setCurrentView} />
       
       <main>
-        {currentView === 'home' ? (
+        {currentView === 'home' && (
           <>
             <Hero />
             
@@ -65,7 +66,11 @@ const App = () => {
             {/* Comparison Table */}
             <ComparisonTable />
           </>
-        ) : (
+        )}
+
+        {currentView === 'gallery' && <Gallery />}
+
+        {(currentView === 'testimonials' || currentView === 'about') && (
           /* Halaman kosong placeholder dengan animasi sederhana */
           <div className="min-h-screen bg-white w-full flex items-center justify-center animate-fade-in-up">
               <div className="text-center">
@@ -76,8 +81,8 @@ const App = () => {
         )}
       </main>
 
-      {/* Footer hanya tampil di home */}
-      {currentView === 'home' && <Footer />}
+      {/* Footer tampil di home dan gallery */}
+      {(currentView === 'home' || currentView === 'gallery') && <Footer />}
     </div>
   );
 };
