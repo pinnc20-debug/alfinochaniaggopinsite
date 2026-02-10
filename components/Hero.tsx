@@ -21,9 +21,9 @@ export const Hero = () => {
   return (
     <div className="relative w-full min-h-[65vh] md:min-h-[90vh] flex flex-col justify-center items-center bg-white overflow-hidden px-4 pb-12 md:pb-0">
       
-      {/* Background Elements */}
-      <div className="absolute top-[-10%] left-[-20%] md:top-[-20%] md:left-[-10%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-red-50 rounded-full blur-3xl opacity-60 animate-pulse"></div>
-      <div className="absolute bottom-[-10%] right-[-20%] md:bottom-[-20%] md:right-[-10%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-amber-50 rounded-full blur-3xl opacity-60 animate-pulse" style={{ animationDelay: '1s' }}></div>
+      {/* Background Elements - Optimized with will-change-transform for GPU */}
+      <div className="absolute top-[-10%] left-[-20%] md:top-[-20%] md:left-[-10%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-red-50 rounded-full blur-3xl opacity-60 animate-pulse will-change-transform"></div>
+      <div className="absolute bottom-[-10%] right-[-20%] md:bottom-[-20%] md:right-[-10%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-amber-50 rounded-full blur-3xl opacity-60 animate-pulse will-change-transform" style={{ animationDelay: '1s' }}></div>
 
       <div className="z-10 text-center max-w-4xl w-full pt-0 md:pt-0">
         <h2 className="text-xs md:text-base font-semibold tracking-widest text-gray-500 uppercase mb-2 md:mb-4">

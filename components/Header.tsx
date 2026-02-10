@@ -69,10 +69,10 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 shadow-sm backdrop-blur-md' : 'bg-white/90 backdrop-blur-sm border-b border-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center py-2 md:py-0 md:h-20 relative">
+        <div className="flex flex-col md:flex-row justify-between items-center py-1 md:py-0 md:h-20 relative">
           
           {/* Top Row on Mobile: Logo */}
-          <div className="w-full md:w-auto flex justify-center md:justify-start items-center mb-2 md:mb-0">
+          <div className="w-full md:w-auto flex justify-center md:justify-start items-center mb-1 md:mb-0">
              <a 
                href="#" 
                onClick={(e) => { e.preventDefault(); handleHomeClick(); }} 
@@ -90,7 +90,7 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
           </div>
           
           {/* Centered Capsule Navigation */}
-          <div className="w-full md:w-auto md:absolute md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 pb-1 md:pb-0">
+          <div className="w-full md:w-auto md:absolute md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 pb-0.5 md:pb-0">
             <div className="mx-auto w-fit max-w-full flex items-center justify-center p-1 md:p-1.5 bg-gray-100 rounded-full border border-gray-200 shadow-md md:shadow-sm transition-all duration-300 hover:shadow-md">
                
                {/* Persistent Info Toggle Button with simplified state */}

@@ -1,72 +1,166 @@
-import { useRef } from 'react';
+import { useRef, useState, memo, useEffect } from 'react';
 import { ScrollReveal } from './ScrollReveal';
-import { Image as ImageIcon, PlayCircle, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Image as ImageIcon, Play, ArrowRight, ArrowLeft } from 'lucide-react';
 
 interface GalleryItem {
   id: number;
   type: 'image' | 'video';
   src: string;
+  thumbnail?: string; // Tambahan properti thumbnail
   caption: string;
 }
 
 const GALLERY_ITEMS: GalleryItem[] = [
+  // Video ditempatkan di paling awal
   {
     id: 1,
+    type: 'video',
+    src: 'https://files.catbox.moe/mtfhef.mp4',
+    thumbnail: 'https://res.cloudinary.com/do8tesayx/image/upload/q_auto:eco/logo_thumbnail_zzhhnv',
+    caption: 'Video Kenangan Baru',
+  },
+  {
+    id: 2,
+    type: 'video',
+    src: 'https://files.catbox.moe/0ansra.mp4',
+    thumbnail: 'https://res.cloudinary.com/do8tesayx/image/upload/q_auto:eco/logo_thumbnail_zzhhnv',
+    caption: 'Video Kenangan 1',
+  },
+  {
+    id: 3,
+    type: 'video',
+    src: 'https://files.catbox.moe/05khsn.mp4',
+    thumbnail: 'https://res.cloudinary.com/do8tesayx/image/upload/q_auto:eco/logo_thumbnail_zzhhnv',
+    caption: 'Video Kenangan 2',
+  },
+  // Dilanjutkan dengan foto-foto
+  {
+    id: 4,
     type: 'image',
     src: 'https://res.cloudinary.com/do8tesayx/image/upload/foto_1_1_vklf3z',
     caption: 'Momen di MTSN 8 Jakarta Barat',
   },
   {
-    id: 2,
+    id: 5,
     type: 'image',
     src: 'https://res.cloudinary.com/do8tesayx/image/upload/q_auto:best/foto_2_g5pclu',
     caption: 'Kebersamaan Kelas',
   },
   {
-    id: 3,
+    id: 6,
     type: 'image',
     src: 'https://res.cloudinary.com/do8tesayx/image/upload/q_auto:best/foto_3_m59fax',
     caption: 'Kegiatan Sekolah',
   },
   {
-    id: 4,
+    id: 7,
     type: 'image',
     src: 'https://res.cloudinary.com/do8tesayx/image/upload/q_auto:best/foto_4_mjvbyx',
     caption: 'Kenangan Tak Terlupakan',
   },
   {
-    id: 5,
+    id: 8,
     type: 'image',
     src: 'https://res.cloudinary.com/do8tesayx/image/upload/q_auto:best/foto_5_urbszx',
     caption: 'Teman Seperjuangan',
   },
   {
-    id: 6,
+    id: 9,
     type: 'image',
     src: 'https://res.cloudinary.com/do8tesayx/image/upload/q_auto:best/foto_6_fiwoey',
     caption: 'Cerita Kami',
   },
-  {
-    id: 7,
-    type: 'video',
-    src: 'https://files.catbox.moe/0ansra.mp4',
-    caption: 'Video Kenangan 1',
-  },
-  {
-    id: 8,
-    type: 'video',
-    src: 'https://files.catbox.moe/05khsn.mp4',
-    caption: 'Video Kenangan 2',
-  }
 ];
+
+// Sub-komponen VideoPlayer dengan dukungan Thumbnail Image
+const VideoPlayer = memo(({ src, thumbnail }: { src: string, thumbnail?: string }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  if (!isPlaying) {
+    return (
+      <button 
+        onClick={() => setIsPlaying(true)}
+        className="group relative w-full h-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer overflow-hidden"
+        aria-label="Putar Video"
+      >
+        {/* Thumbnail Image */}
+        {thumbnail ? (
+          <img 
+            src={thumbnail} 
+            alt="Video thumbnail" 
+            className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-75 transition-all duration-300 group-hover:scale-105"
+            loading="lazy"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-tr from-gray-200 to-gray-50 opacity-50" />
+        )}
+        
+        {/* Play Button Overlay */}
+        <div className="z-10 w-16 h-16 rounded-full bg-white/30 backdrop-blur-md border border-white/40 shadow-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 group-hover:bg-white/40">
+           <Play size={32} className="text-white ml-1 drop-shadow-md" fill="currentColor" />
+        </div>
+        
+        <div className="absolute bottom-6 px-3 py-1 rounded-full bg-black/30 backdrop-blur-sm text-[10px] font-bold text-white uppercase tracking-widest border border-white/20">
+           Klik untuk memutar
+        </div>
+      </button>
+    );
+  }
+
+  return (
+    <video 
+      src={src} 
+      className="w-full h-full object-contain bg-black"
+      controls
+      autoPlay
+      playsInline
+    />
+  );
+});
+
+// Sub-komponen untuk Gambar
+const ImageItem = memo(({ src, caption }: { src: string, caption: string }) => (
+    <img 
+        src={src} 
+        alt={caption} 
+        className="w-full h-full object-contain transform group-hover/item:scale-105 transition-transform duration-700 ease-in-out"
+        loading="lazy"
+        decoding="async"
+        draggable="false"
+    />
+));
 
 export const Gallery = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Efek Auto Scroll
+  useEffect(() => {
+    // Jangan scroll jika sedang dipause (user interaksi)
+    if (isPaused) return;
+
+    const autoScrollInterval = setInterval(() => {
+      if (scrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        const scrollAmount = 524; // Samakan dengan tombol manual
+
+        // Cek jika sudah mentok di ujung kanan (dengan toleransi 10px)
+        if (scrollLeft + clientWidth >= scrollWidth - 10) {
+          // Reset ke awal
+          scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          // Scroll ke item berikutnya
+          scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+      }
+    }, 3000); // Scroll setiap 3 detik
+
+    return () => clearInterval(autoScrollInterval);
+  }, [isPaused]);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const { current } = scrollRef;
-      // Scroll amount: item width (500px) + gap (24px for md) roughly
       const scrollAmount = 524;
       
       if (direction === 'left') {
@@ -81,7 +175,6 @@ export const Gallery = () => {
     <div className="min-h-screen bg-white pt-28 pb-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header Section */}
         <ScrollReveal>
           <div className="text-center max-w-3xl mx-auto mb-10">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
@@ -94,10 +187,9 @@ export const Gallery = () => {
           </div>
         </ScrollReveal>
 
-        {/* Horizontal Slider Section */}
         <ScrollReveal delay="0.2s">
           <div className="relative group">
-            {/* Hint Text for Mobile */}
+            {/* Hint Mobile */}
             <div className="flex justify-end mb-4 md:hidden">
                 <div className="flex items-center gap-1 text-xs font-medium text-gray-400 animate-pulse">
                     <span>Geser</span>
@@ -105,7 +197,7 @@ export const Gallery = () => {
                 </div>
             </div>
 
-            {/* Navigation Buttons (Desktop Only) - Muncul saat hover */}
+            {/* Tombol Navigasi Desktop */}
             <button 
                 onClick={() => scroll('left')}
                 className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 items-center justify-center bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-100 text-gray-700 hover:scale-110 hover:bg-white transition-all duration-300 focus:outline-none group-hover:opacity-100 opacity-0 transition-opacity"
@@ -122,9 +214,13 @@ export const Gallery = () => {
                 <ArrowRight size={24} />
             </button>
 
-            {/* Slider Container - Menggunakan flex dan overflow-x-auto */}
+            {/* Slider Container dengan Event Listeners untuk Pause Auto Scroll */}
             <div 
                 ref={scrollRef}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+                onTouchStart={() => setIsPaused(true)}
+                onTouchEnd={() => setIsPaused(false)}
                 className="flex overflow-x-auto gap-4 md:gap-6 pb-8 snap-x snap-mandatory scroll-hidden -mx-4 px-4 md:mx-0 md:px-0"
             >
               {GALLERY_ITEMS.map((item) => (
@@ -134,32 +230,22 @@ export const Gallery = () => {
                 >
                   <div className="group/item relative aspect-[4/3] rounded-3xl overflow-hidden bg-gray-50 shadow-sm transition-all duration-300 border border-gray-200 flex items-center justify-center">
                     
-                    {/* Media Content */}
+                    {/* Media Content Optimasi */}
                     {item.type === 'video' ? (
-                       <video 
-                         src={item.src} 
-                         className="w-full h-full object-contain"
-                         controls
-                         preload="metadata"
-                         playsInline
-                       />
+                       <VideoPlayer src={item.src} thumbnail={item.thumbnail} />
                     ) : (
-                       <img 
-                         src={item.src} 
-                         alt={item.caption} 
-                         className="w-full h-full object-contain transform group-hover/item:scale-105 transition-transform duration-700 ease-in-out"
-                         loading="lazy"
-                         draggable="false"
-                       />
+                       <ImageItem src={item.src} caption={item.caption} />
                     )}
 
-                    {/* Overlay Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-100 pointer-events-none" />
+                    {/* Overlay Gradient untuk Image */}
+                    {item.type === 'image' && (
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-100 pointer-events-none" />
+                    )}
 
                     {/* Badge Foto/Video */}
                     <div className="absolute bottom-0 left-0 right-0 p-6 z-10 pointer-events-none">
-                      <div className="flex items-center gap-2 text-white/90 text-sm font-medium">
-                        {item.type === 'image' ? <ImageIcon size={16} /> : <PlayCircle size={16} />}
+                      <div className="flex items-center gap-2 text-white/90 text-sm font-medium drop-shadow-md">
+                        {item.type === 'image' ? <ImageIcon size={16} /> : <Play size={16} />}
                         <span className="uppercase tracking-wider text-[10px] font-bold bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/10">
                             {item.type === 'image' ? 'Foto' : 'Video'}
                         </span>
