@@ -7,6 +7,7 @@ import { Footer } from './components/Footer';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Gallery } from './components/Gallery';
 import { Testimonials } from './components/Testimonials';
+import { About } from './components/About';
 import { SNAPDRAGON_DATA, MEDIATEK_DATA } from './constants';
 
 export type ViewState = 'home' | 'gallery' | 'testimonials' | 'about';
@@ -73,15 +74,7 @@ const App = () => {
 
         {currentView === 'testimonials' && <Testimonials />}
 
-        {currentView === 'about' && (
-          /* Halaman kosong placeholder dengan animasi sederhana */
-          <div className="min-h-screen bg-white w-full flex items-center justify-center animate-fade-in-up">
-              <div className="text-center">
-                  <h2 className="text-2xl font-bold text-gray-300 mb-2">Halaman {currentView}</h2>
-                  <p className="text-gray-400">Sedang dalam pengembangan</p>
-              </div>
-          </div>
-        )}
+        {currentView === 'about' && <About />}
       </main>
 
       {/* Footer tampil di semua halaman */}

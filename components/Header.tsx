@@ -1,14 +1,19 @@
-import { useState, useEffect, MouseEvent } from 'react';
-import { Info, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface HeaderProps {
   currentView: string;
   onNavigate: (view: any) => void;
 }
 
+const NAV_ITEMS = [
+  { id: 'home', label: 'Beranda' },
+  { id: 'gallery', label: 'Galeri' },
+  { id: 'testimonials', label: 'Testimoni' },
+  { id: 'about', label: 'Tentang Saya' }
+];
+
 export const Header = ({ currentView, onNavigate }: HeaderProps) => {
   const [scrolled, setScrolled] = useState(false);
-  const [showMainMenu, setShowMainMenu] = useState(false);
 
   // Handle scroll effect for navbar background with Performance Optimization (RAF + Passive)
   useEffect(() => {
@@ -28,63 +33,23 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Sinkronisasi state menu jika view berubah dari luar
-  useEffect(() => {
-      if (currentView !== 'home') {
-          setShowMainMenu(true);
-      }
-  }, [currentView]);
-
-  // Fungsi khusus untuk scroll manual
-  const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      const nav = document.querySelector('nav');
-      const headerOffset = nav ? nav.offsetHeight + 20 : 140; 
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
-  };
-
-  const handleHomeClick = () => {
-      onNavigate('home');
-      setShowMainMenu(false);
-      if (currentView === 'home') {
+  const handleNavClick = (id: string) => {
+      onNavigate(id);
+      if (id === 'home') {
          window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-  };
-
-  const handleInfoToggle = () => {
-    if (showMainMenu) {
-      // Jika menu sedang terbuka dan user menutupnya
-      // Cek apakah sedang di halaman selain home
-      if (currentView !== 'home') {
-        // Kembali ke home
-        onNavigate('home');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      setShowMainMenu(false);
-    } else {
-      setShowMainMenu(true);
-    }
   };
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 shadow-sm backdrop-blur-md' : 'bg-white/90 backdrop-blur-sm border-b border-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center py-1 md:py-0 md:h-20 relative">
+        <div className="flex flex-col md:flex-row justify-between items-center py-2 md:py-0 md:h-20 relative">
           
           {/* Top Row on Mobile: Logo */}
-          <div className="w-full md:w-auto flex justify-center md:justify-start items-center mb-1 md:mb-0">
+          <div className="w-full md:w-auto flex justify-center md:justify-start items-center mb-2 md:mb-0">
              <a 
                href="#" 
-               onClick={(e) => { e.preventDefault(); handleHomeClick(); }} 
+               onClick={(e) => { e.preventDefault(); handleNavClick('home'); }} 
                className="flex items-center space-x-2 z-50 hover:opacity-90 transition-all duration-300 hover:scale-105 py-1"
              >
                 <img 
@@ -98,88 +63,21 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
              </a>
           </div>
           
-          {/* Centered Capsule Navigation */}
-          <div className="w-full md:w-auto md:absolute md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 pb-0.5 md:pb-0">
-            <div className={`mx-auto w-fit max-w-full flex items-center justify-center p-1 md:p-1.5 rounded-full border border-gray-200 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${showMainMenu ? 'bg-white shadow-lg scale-[1.02]' : 'bg-gray-100 shadow-md md:shadow-sm hover:shadow-md'}`}>
+          {/* Centered Capsule Navigation (Always Open) */}
+          <div className="w-full md:w-auto md:absolute md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2 pb-1 md:pb-0">
+            <div className="mx-auto w-fit max-w-full flex items-center justify-center p-1.5 rounded-full border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-300">
                
-               {/* Persistent Info Toggle Button with Animated Icon & Text */}
-               <button 
-                 onClick={handleInfoToggle}
-                 className={`group relative p-2 flex items-center justify-center rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-10 ${showMainMenu ? 'bg-gray-100 text-gray-900 rotate-0' : 'text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-sm'}`}
-                 aria-label={showMainMenu ? "Tutup Menu" : "Buka Menu"}
-               >
-                 <div className="relative flex items-center justify-center w-4 h-4">
-                     {/* Info Icon */}
-                     <Info 
-                        size={16} 
-                        strokeWidth={2.5} 
-                        className={`absolute inset-0 transition-all duration-500 ease-out transform ${showMainMenu ? 'rotate-180 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100 group-hover:rotate-12'}`} 
-                     />
-                     {/* Close (X) Icon */}
-                     <X 
-                        size={16} 
-                        strokeWidth={2.5} 
-                        className={`absolute inset-0 transition-all duration-500 ease-out transform ${showMainMenu ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'}`} 
-                     />
-                 </div>
-
-                 {/* Animated Text "Lainnya" */}
-                 <span className={`overflow-hidden whitespace-nowrap transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] text-xs font-bold ${
-                    showMainMenu 
-                      ? 'max-w-0 opacity-0 -translate-x-2' // Slide out left when menu opens
-                      : 'max-w-0 ml-0 opacity-0 lg:max-w-[60px] lg:ml-1 lg:opacity-100 translate-x-0' // Slide in when menu closes (desktop)
-                 }`}>
-                   Lainnya
-                 </span>
-               </button>
-
                {/* Navigation Links Area */}
-               <div className="flex items-center overflow-hidden">
-                   {showMainMenu ? (
-                       // MENU UTAMA (Expanded) - Animated Entrance
-                       <div className="flex items-center space-x-0 md:space-x-1 pl-1 animate-fade-in-right">
-                           {[
-                              { id: 'home', label: 'Beranda' },
-                              { id: 'gallery', label: 'Galeri' },
-                              { id: 'testimonials', label: 'Testimoni' },
-                              { id: 'about', label: 'Tentang' }
-                           ].map((item, idx) => (
-                             <button 
-                               key={item.id}
-                               onClick={() => item.id === 'home' ? handleHomeClick() : onNavigate(item.id)}
-                               className={`px-3 py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md ${currentView === item.id ? 'bg-gray-100 text-gray-900 shadow-inner' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`}
-                               style={{ animationDelay: `${idx * 50}ms` }}
-                             >
-                               {item.label}
-                             </button>
-                           ))}
-                       </div>
-                   ) : (
-                       // NAVIGASI ANCHOR (Default) - Animated Entrance
-                       <div className="flex items-center space-x-0 pl-1 animate-fade-in-left">
-                           <a 
-                             href="#snapdragon" 
-                             onClick={(e) => handleNavClick(e, 'snapdragon')}
-                             className="px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-snapdragon hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95 whitespace-nowrap"
-                           >
-                             Snapdragon
-                           </a>
-                           <a 
-                             href="#mediatek" 
-                             onClick={(e) => handleNavClick(e, 'mediatek')}
-                             className="px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-mediatek hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95 whitespace-nowrap"
-                           >
-                             MediaTek
-                           </a>
-                           <a 
-                             href="#comparison" 
-                             onClick={(e) => handleNavClick(e, 'comparison')}
-                             className="px-2.5 py-2 md:px-5 rounded-full text-xs md:text-sm font-bold text-gray-600 hover:bg-white hover:text-gray-900 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 active:scale-95 whitespace-nowrap"
-                           >
-                             VS
-                           </a>
-                       </div>
-                   )}
+               <div className="flex items-center space-x-1 overflow-x-auto md:overflow-visible scroll-hidden px-1">
+                   {NAV_ITEMS.map((item) => (
+                     <button 
+                       key={item.id}
+                       onClick={() => handleNavClick(item.id)}
+                       className={`px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 whitespace-nowrap hover:-translate-y-0.5 ${currentView === item.id ? 'bg-gray-900 text-white shadow-md' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'}`}
+                     >
+                       {item.label}
+                     </button>
+                   ))}
                </div>
             </div>
           </div>
