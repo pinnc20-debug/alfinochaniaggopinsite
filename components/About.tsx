@@ -89,7 +89,7 @@ export const About = () => {
                 
                 <div className="prose prose-lg text-gray-600 relative z-10 leading-relaxed font-light">
                   <p>
-                    Halo aku <strong>Alfino Chaniaggo</strong> sebutannya biasanya <strong>Pino</strong> atau ada juga orang special yang manggil <strong>Botak</strong> juga seneng aja gitu kalo dipanggil botak ama dia.
+                    Halo aku <strong>Alfino Chaniaggo</strong> sebutannya biasanya <strong>Pino</strong>
                   </p>
                   <p className="mt-4">
                     Oke pertama tama di kelas 7 saya di kelas <strong>76</strong>, di kelas 8 di <strong>84</strong>, kalo sekarang ya di <strong>91</strong> si.
