@@ -65,7 +65,7 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
           
           {/* Centered Capsule Navigation */}
           <div className="w-full md:w-auto md:absolute md:left-1/2 md:top-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2">
-            <div className="mx-auto w-fit max-w-[95vw] md:max-w-full flex items-center justify-center p-1 rounded-full border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-300">
+            <div className="mx-auto w-fit max-w-[95vw] md:max-w-full flex items-center justify-center p-1 rounded-full border border-gray-200 bg-white shadow-sm hover:shadow-md">
                
                {/* Navigation Links Area */}
                <div className="flex items-center space-x-0.5 md:space-x-1 overflow-x-auto scroll-hidden px-1 no-scrollbar">
@@ -73,7 +73,7 @@ export const Header = ({ currentView, onNavigate }: HeaderProps) => {
                      <button 
                        key={item.id}
                        onClick={() => handleNavClick(item.id)}
-                       className={`px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[11px] md:text-sm font-bold transition-all duration-300 whitespace-nowrap ${currentView === item.id ? 'bg-gray-900 text-white shadow-md scale-[1.02]' : 'text-gray-600 hover:bg-gray-100'}`}
+                       className={`px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[11px] md:text-sm font-bold whitespace-nowrap ${currentView === item.id ? 'bg-gray-900 text-white shadow-md' : 'text-gray-600 hover:bg-gray-100'}`}
                      >
                        {item.label}
                      </button>
